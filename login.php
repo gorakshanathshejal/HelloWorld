@@ -3,26 +3,31 @@ include "conn.php";
 
 if(isset($_POST['submit'])){
     $username = trim($_POST['username']);
-    $email = trim($_POST['email']);
-    $contact = trim($_POST['contact']);
     $pass = trim($_POST['password']);
-    $conpass = trim($_POST['conpass']);
-    $address = trim($_POST['address']);
-    $class = trim($_POST['class']);
+   
+    $sql = "SELECT * FROM register WHERE username = '$username'";
+    $result = $conn->query($sql);
 
-    //$password = password_hash($pass, PASSWORD_DEFAULT);
-    //$conpassword = password_hash($conpass, PASSWORD_DEFAULT);
+if ($result->num_rows > 0) {
+  while($row = $result->fetch_assoc()) {
+    $id = $row["id"];
+    $user = $row["username"]; 
+    $passw = $row["password"];
 
-
-    if($pass == $conpass){
-        $querry = "INSERT INTO register (username, email, contact, password,  address, class) VALUES ('$username', '$email', '$contact', '$pass', '$address', '$class')";
-
-         $i = mysqli_query($conn, $querry);
-
-         header('location: login.php');
-    }else{
-        echo 'Password missmatch';
+    if(($username == $user) && ($pass == $passw)){
+        header('location: upload.php');
     }
+  }
+} else {
+  echo "0 results";
+}
+$conn->close();
+
+
+
+         
+        
+   
 
 
 }
@@ -79,49 +84,27 @@ if(isset($_POST['submit'])){
         
             <form class="row g-3"  method="post"    style='width:45%; margin:auto; font-family:big shulder display;   background-color: hsla(89, 43%, 51%, 0.3); border-radius:20px;'>
             <div>
-                <h2>Register</h2>
+                <h2>Log In</h2>
             </div>
         
         <div class="col-md-6" style='margin-top:10px;'>
             <label for="inputEmail4" class="form-label">User Name</label>
             <input type="text" class="form-control" id="inputEmail4" name="username" required>
         </div>
-        <div class="col-md-6" style='margin-top:10px;'>
-            <label for="inputEmail4" class="form-label">Email</label>
-            <input type="email" class="form-control" id="inputEmail4" name="email" required>
-        </div>
-        <div class="col-md-6" style='margin-top:10px;'>
-            <label for="inputEmail4" class="form-label">Contact Number</label>
-            <input type="integer" class="form-control" id="inputEmail4" name="contact" required>
-        </div>
+       
+        
         <div class="col-md-6" style='margin-top:10px;'>
             <label for="inputPassword4" class="form-label">Password</label>
             <input type="password" class="form-control" id="inputPassword4" name="password" required>
         </div>
-        <div class="col-md-6" style='margin-top:10px;'>
-            <label for="inputPassword4" class="form-label">Confirm Password</label>
-            <input type="password" class="form-control" id="inputPassword4" name="conpass" required>
-        </div>
-        <div class="col-12" style='margin-top:10px;'>
-            <label for="inputAddress" class="form-label">Address</label>
-            <input type="text" class="form-control" id="inputAddress" name="address" required>
-        </div>
         
-        <div class="col-md-4 style='margin-top:10px;'">
-            <label for="inputState" class="form-label">Select Class</label>
-            <select id="inputState" class="form-select" name="class" required>
-            <option selected>Class</option>
-            <option>F.Y.</option>
-            <option>S.Y.</option>
-            <option>T.Y.</option>
-            <option>B.Tech.</option>
-            </select>
-        </div>
+       
+        
         
         
         <div class="col-12" style='margin-top:10px;'>
-            <button type="submit" class="btn btn-primary" name="submit">Register</button>
-            <p>Already An User <a href="Login.php">Login Here </a></p>
+            <button type="submit" class="btn btn-primary" name="submit">Login</button>
+            <p>New User <a href="index.php">Register Here</a></p>
         </div>
     </form>
         </div>
